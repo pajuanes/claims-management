@@ -22,6 +22,7 @@ Herramienta **Full Stack** para gestores de reclamaciones que permite crear y ge
     - [Todos los Tests](#todos-los-tests)
     - [Tests con Cobertura](#tests-con-cobertura)
 - [API Endpoints](#api-endpoints)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Documentación Adicional](#documentación-adicional)
 
 ---
@@ -284,6 +285,108 @@ Genera reporte HTML en `htmlcov/index.html`
 
 - `GET /health` - Health check
 - `GET /` - Root endpoint con versión
+
+---
+
+## CI/CD Pipeline
+
+### Workflow Automático
+
+El proyecto incluye un workflow de GitHub Actions (`.github/workflows/ci-cd.yml`) que se ejecuta automáticamente en cada push o pull request a las ramas `main` y `develop`.
+
+### Proceso del Pipeline
+
+#### 1. Job: Test
+
+**Pasos ejecutados:**
+
+1. **Setup**: Configura Python 3.10 y Node.js 18
+2. **Instalar dependencias**:
+   ```bash
+   pip install -r requirements.txt
+   npm run install:backend
+   npm run install:frontend
+   ```
+3. **Ejecutar tests backend**:
+   ```bash
+   cd backend
+   pytest tests/ -v --cov=app --cov-report=term
+   ```
+   - Cobertura objetivo: 95%+
+   - Si los tests fallan, el pipeline se detiene
+4. **Build frontend**:
+   ```bash
+   npm run build:frontend
+   ```
+   - Si el build falla, el pipeline se detiene
+
+#### 2. Job: Deploy (solo rama `main`)
+
+**Requisitos:**
+- Job `test` debe completarse exitosamente
+- Solo se ejecuta en push a rama `main`
+
+**Pasos ejecutados:**
+
+1. **Deploy to production**: Placeholder para comandos de despliegue
+2. **Create release tag**: Genera tag automático con formato `vYYYY.MM.DD-HHMMSS`
+
+### Ejecución Manual del Workflow
+
+Para simular el workflow localmente:
+
+```bash
+# 1. Instalar dependencias
+pip install -r requirements.txt
+npm run install:backend
+npm run install:frontend
+
+# 2. Levantar MongoDB
+docker compose up -d
+
+# 3. Ejecutar tests
+cd backend
+pytest tests/ -v --cov=app --cov-report=term
+
+# 4. Build frontend
+cd ..
+npm run build:frontend
+```
+
+### Manejo de Errores
+
+El pipeline está configurado para **detenerse inmediatamente** si ocurre algún error:
+
+- **Tests fallan**: El job `test` falla y no se ejecuta `deploy`
+- **Build falla**: El job `test` falla y no se ejecuta `deploy`
+- **Deploy falla**: Se notifica el error pero no afecta al tag
+
+### Verificar Estado del Pipeline
+
+1. Ir a la pestaña **Actions** en GitHub
+2. Ver el estado de cada workflow:
+   - ✅ Verde: Exitoso
+   - ❌ Rojo: Fallido
+   - 🟡 Amarillo: En progreso
+3. Click en el workflow para ver logs detallados de cada paso
+
+### Configuración de Secretos
+
+Para habilitar despliegue automático, configurar **Repository secrets** en GitHub:
+
+1. Ir a `Settings` > `Secrets and variables` > `Actions` > `Repository secrets`
+2. Click en `New repository secret`
+3. Añadir los siguientes secretos (si son necesarios):
+
+**Secretos recomendados:**
+
+- `DOCKER_USERNAME`: Usuario de Docker Hub (para build de imágenes)
+- `DOCKER_PASSWORD`: Token de acceso de Docker Hub
+- `AWS_ACCESS_KEY_ID`: Credenciales AWS (si se despliega en AWS)
+- `AWS_SECRET_ACCESS_KEY`: Secret key de AWS
+- `MONGO_URI_PROD`: URI de MongoDB en producción
+
+**Nota**: Los secretos de repositorio están disponibles para todas las ramas. Si necesitas secretos específicos por entorno (staging/production), usa **Environment secrets** en su lugar.
 
 ---
 
