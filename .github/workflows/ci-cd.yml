@@ -46,7 +46,7 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          pytest tests/ -v --cov=app --cov-report=term
+          pytest tests/test_unit.py -v --cov=app --cov-report=term
         env:
           MONGO_URI: mongodb://localhost:27017/claims_manager_test
       

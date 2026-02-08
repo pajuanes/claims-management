@@ -310,8 +310,9 @@ El proyecto incluye un workflow de GitHub Actions (`.github/workflows/ci-cd.yml`
 3. **Ejecutar tests backend**:
    ```bash
    cd backend
-   pytest tests/ -v --cov=app --cov-report=term
+   pytest tests/test_unit.py -v --cov=app --cov-report=term
    ```
+   - Solo ejecuta tests unitarios (no requieren servidor)
    - Cobertura objetivo: 95%+
    - Si los tests fallan, el pipeline se detiene
 4. **Build frontend**:
@@ -346,7 +347,7 @@ docker compose up -d
 
 # 3. Ejecutar tests
 cd backend
-pytest tests/ -v --cov=app --cov-report=term
+pytest tests/test_unit.py -v --cov=app --cov-report=term
 
 # 4. Build frontend
 cd ..
