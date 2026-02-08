@@ -9,6 +9,8 @@ on:
 permissions:
   contents: write
   packages: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -52,6 +54,13 @@ jobs:
       
       - name: Build frontend
         run: npm run build:frontend
+      
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/claims-manager-frontend/browser
+          retention-days: 1
 
   deploy:
     name: Deploy
@@ -59,13 +68,29 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Deploy to production
-        run: echo "Deploy to production"
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
       
       - name: Create release tag
         env:
