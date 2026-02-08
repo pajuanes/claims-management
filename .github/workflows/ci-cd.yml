@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: frontend/dist/claims-manager-frontend/browser
+          path: frontend/dist/claim-manager/browser
           retention-days: 1
 
   deploy:
@@ -68,27 +68,26 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Download frontend artifact
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
-          path: frontend-dist
-
+          path: dist
+      
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend-dist
-
+          path: dist
+      
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v2
+        continue-on-error: true
       
       - name: Create release tag
         env:
