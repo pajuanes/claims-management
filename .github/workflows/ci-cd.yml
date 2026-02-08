@@ -53,7 +53,7 @@ jobs:
           MONGO_URI: mongodb://localhost:27017/claims_manager_test
       
       - name: Build frontend
-        run: npm run build:frontend
+        run: npm run build:frontend:gh-pages
       
       - name: Upload frontend artifact
         uses: actions/upload-artifact@v4

@@ -371,6 +371,17 @@ El pipeline está configurado para **detenerse inmediatamente** si ocurre algún
    - 🟡 Amarillo: En progreso
 3. Click en el workflow para ver logs detallados de cada paso
 
+### Configuración de GitHub Pages (Opcional)
+
+Para habilitar el despliegue automático en GitHub Pages:
+
+1. Ve a `Settings` > `Pages`
+2. En `Source`, selecciona `GitHub Actions`
+3. Guarda los cambios
+4. El próximo push a `main` desplegará automáticamente
+
+**Nota**: Si GitHub Pages no está habilitado, el workflow continuará y creará el release tag de todas formas.
+
 ### Configuración de Secretos
 
 Para habilitar despliegue automático, configurar **Repository secrets** en GitHub:

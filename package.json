@@ -12,6 +12,7 @@
     "install:backend": "npm --prefix backend/node-backend install",
     "install:frontend": "npm --prefix frontend install",
     "build:frontend": "npm --prefix frontend run build",
+    "build:frontend:gh-pages": "npm --prefix frontend run build -- --base-href=/claims-management/",
     "test": "jest"
   },
   "dependencies": {
