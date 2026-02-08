@@ -290,9 +290,14 @@ Genera reporte HTML en `htmlcov/index.html`
 
 ## CI/CD Pipeline
 
-### Workflow Automático
+### Workflows Automáticos
 
-El proyecto incluye un workflow de GitHub Actions (`.github/workflows/ci-cd.yml`) que se ejecuta automáticamente en cada push o pull request a las ramas `main` y `develop`.
+El proyecto incluye dos workflows de GitHub Actions:
+
+1. **`.github/workflows/ci-cd.yml`**: Testing, building y release tags
+2. **`.github/workflows/deploy-pages.yml`**: Despliegue a GitHub Pages
+
+Ambos se ejecutan automáticamente en push a rama `main`.
 
 ### Proceso del Pipeline
 
@@ -371,16 +376,31 @@ El pipeline está configurado para **detenerse inmediatamente** si ocurre algún
    - 🟡 Amarillo: En progreso
 3. Click en el workflow para ver logs detallados de cada paso
 
-### Configuración de GitHub Pages (Opcional)
+### GitHub Pages Deployment
 
-Para habilitar el despliegue automático en GitHub Pages:
+El workflow `deploy-pages.yml` despliega automáticamente el frontend en GitHub Pages.
+
+**Configuración requerida:**
 
 1. Ve a `Settings` > `Pages`
 2. En `Source`, selecciona `GitHub Actions`
 3. Guarda los cambios
-4. El próximo push a `main` desplegará automáticamente
 
-**Nota**: Si GitHub Pages no está habilitado, el workflow continuará y creará el release tag de todas formas.
+**Proceso automático:**
+
+1. **Build job**: Instala dependencias y construye frontend con `--configuration=production --base-href=/claims-management/`
+2. **Deploy job**: Despliega artifact a GitHub Pages
+
+**Ejecución manual:**
+
+Puedes ejecutar el workflow manualmente desde la pestaña `Actions` > `Deploy to GitHub Pages` > `Run workflow`
+
+**Limitaciones:**
+
+- GitHub Pages solo sirve archivos estáticos (HTML/CSS/JS)
+- No puede ejecutar el backend Node.js ni conectarse a MongoDB
+- Requiere backend desplegado en servicio externo (Railway, Render, AWS, etc.)
+- Actualizar `frontend/src/environments/environment.prod.ts` con URL del backend en producción
 
 ### Configuración de Secretos
 
