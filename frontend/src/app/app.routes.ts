@@ -7,6 +7,7 @@ export const routes: Routes = [
   { path: '', redirectTo: '/claims', pathMatch: 'full' },
   { path: 'claims', component: ClaimsListComponent },
   { path: 'claims/create', component: ClaimFormComponent },
+  { path: 'claims/edit/:id', component: ClaimFormComponent },
   { path: 'claims/:id', component: ClaimDetailComponent },
   { path: '**', redirectTo: '/claims' }
 ];

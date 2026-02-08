@@ -26,6 +26,7 @@
   padding: 1.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
+  padding-top: 3rem;
 }
 
 .claim-content {
@@ -37,10 +38,30 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.btn-delete {
+.claim-actions {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-edit {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.btn-edit:hover {
+  background: #218838;
+}
+
+.btn-delete {
   background: #dc3545;
   color: white;
   border: none;

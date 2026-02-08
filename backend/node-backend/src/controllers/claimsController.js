@@ -36,6 +36,23 @@ class ClaimsController {
     }
   }
 
+  // PUT /claims/:id
+  async updateClaim(req, res) {
+    try {
+      const claim = await Claim.findByIdAndUpdate(
+        req.params.id,
+        { title: req.body.title, description: req.body.description, status: req.body.status },
+        { new: true, runValidators: true }
+      );
+      if (!claim) {
+        return res.status(404).json({ error: "Claim not found" });
+      }
+      res.json(claim);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   // PATCH /claims/:id/status
   async updateClaimStatus(req, res) {
     try {

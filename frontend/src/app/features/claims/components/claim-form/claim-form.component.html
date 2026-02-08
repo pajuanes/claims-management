@@ -1,5 +1,5 @@
 <div class="claim-form-container">
-  <h1>Create New Claim</h1>
+  <h1>{{ isEditMode ? 'Edit Claim' : 'Create New Claim' }}</h1>
 
   @if (errorMessage) {
     <div class="error-banner">{{ errorMessage }}</div>
@@ -40,7 +40,7 @@
 
     <div class="form-actions">
       <button type="submit" class="btn-primary" [disabled]="claimForm.invalid || submitting">
-        {{ submitting ? 'Creating...' : 'Create Claim' }}
+        {{ submitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Claim' : 'Create Claim') }}
       </button>
       <button type="button" class="btn-secondary" (click)="onCancel()">
         Cancel

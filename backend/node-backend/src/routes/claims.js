@@ -28,6 +28,7 @@ const damageValidation = [
 router.get('/', claimsController.getAllClaims);
 router.get('/:id', claimsController.getClaimById);
 router.post('/', createClaimValidation, validate, claimsController.createClaim);
+router.put('/:id', createClaimValidation, validate, claimsController.updateClaim);
 router.patch('/:id/status', updateStatusValidation, validate, claimsController.updateClaimStatus);
 router.delete('/:id', claimsController.deleteClaim);
 

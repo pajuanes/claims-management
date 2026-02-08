@@ -43,6 +43,11 @@ export class ClaimsListComponent implements OnInit {
     this.router.navigate(['/claims/create']);
   }
 
+  editClaim(claimId: string, event: Event): void {
+    event.stopPropagation();
+    this.router.navigate(['/claims/edit', claimId]);
+  }
+
   deleteClaim(claimId: string, event: Event): void {
     event.stopPropagation();
     

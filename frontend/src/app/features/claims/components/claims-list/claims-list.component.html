@@ -24,9 +24,14 @@
           <p class="total">Total: {{ claim.total_amount | currency:'EUR':'symbol':'1.2-2':'es' }}</p>
           <p class="damages-count">Damages: {{ claim.damages.length }}</p>
         </div>
-        <button class="btn-delete" (click)="deleteClaim(claim.id, $event)" title="Delete claim">
-          Delete
-        </button>
+        <div class="claim-actions">
+          <button class="btn-edit" (click)="editClaim(claim.id, $event)" title="Edit claim">
+            Edit
+          </button>
+          <button class="btn-delete" (click)="deleteClaim(claim.id, $event)" title="Delete claim">
+            Delete
+          </button>
+        </div>
       </div>
     }
   </div>
