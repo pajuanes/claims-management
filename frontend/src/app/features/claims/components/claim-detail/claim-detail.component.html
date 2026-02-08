@@ -1,0 +1,88 @@
+<div class="claim-detail-container">
+  @if (loading()) {
+    <div class="loading">Loading claim...</div>
+  }
+
+  @if (claim(); as claimData) {
+    <div class="claim-header">
+      <h1>{{ claimData.title }}</h1>
+      <span class="status" [class]="'status-' + claimData.status.toLowerCase()">
+        {{ claimData.status }}
+      </span>
+    </div>
+
+    <div class="claim-info">
+      <p><strong>Description:</strong> {{ claimData.description || 'No description' }}</p>
+      <p class="total-amount">
+        <strong>Total Amount:</strong> {{ totalAmount() | currency:'EUR':'symbol':'1.2-2':'es' }}
+      </p>
+    </div>
+
+    <div class="damages-section">
+      <div class="section-header">
+        <h2>Damages</h2>
+        @if (canManageDamages()) {
+          <button class="btn-primary" (click)="toggleDamageForm(true)">
+            Add Damage
+          </button>
+        }
+      </div>
+
+      @if (showDamageForm()) {
+        <div #damageFormContainer></div>
+      }
+
+      <div class="damages-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Part</th>
+              <th>Severity</th>
+              <th>Price</th>
+              <th>Score</th>
+              <th>Image</th>
+              @if (canManageDamages()) {
+                <th>Actions</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (damage of claimData.damages; track damage._id || $index) {
+              <tr>
+                <td>{{ damage.part }}</td>
+                <td>
+                  <span class="severity" [class]="'severity-' + damage.severity.toLowerCase()">
+                    {{ damage.severity }}
+                  </span>
+                </td>
+                <td>{{ damage.price | currency:'EUR':'symbol':'1.2-2':'es' }}</td>
+                <td>{{ damage.score }}/10</td>
+                <td>
+                  <a [href]="damage.image_url" target="_blank">View</a>
+                </td>
+                @if (canManageDamages()) {
+                  <td>
+                    <button class="btn-secondary" (click)="editDamage(damage)" style="margin-right: 8px;">
+                      Edit
+                    </button>
+                    <button class="btn-danger" (click)="deleteDamage(damage._id || damage.id)">
+                      Delete
+                    </button>
+                  </td>
+                }
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="empty-state">No damages registered</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <button class="btn-secondary" routerLink="/claims">
+      Back to List
+    </button>
+  }
+</div>

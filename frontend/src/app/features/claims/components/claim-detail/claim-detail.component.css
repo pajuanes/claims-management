@@ -1,0 +1,115 @@
+.claim-detail-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.claim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.claim-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.damages-table {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-pending { background: #ffc107; color: #000; }
+.status-in_review { background: #17a2b8; color: #fff; }
+.status-finalized { background: #28a745; color: #fff; }
+.status-canceled { background: #dc3545; color: #fff; }
+
+.severity {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+}
+
+.severity-low { background: #d4edda; color: #155724; }
+.severity-medium { background: #fff3cd; color: #856404; }
+.severity-high { background: #f8d7da; color: #721c24; }
+
+.btn-primary, .btn-secondary, .btn-danger {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  margin-top: 2rem;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.empty-state {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+}

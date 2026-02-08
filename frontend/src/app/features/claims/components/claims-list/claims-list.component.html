@@ -1,0 +1,33 @@
+<div class="claims-container">
+  <h1>Claims Manager</h1>
+  
+  <button class="btn-primary" (click)="navigateToCreate()">
+    New Claim
+  </button>
+
+  @if (loading()) {
+    <div class="loading">Loading claims...</div>
+  }
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  <div class="claims-grid">
+    @for (claim of claims(); track claim.id) {
+      <div class="claim-card">
+        <div [routerLink]="['/claims', claim.id]" class="claim-content">
+          <h3>{{ claim.title }}</h3>
+          <p class="status" [class]="'status-' + claim.status.toLowerCase()">
+            {{ claim.status }}
+          </p>
+          <p class="total">Total: {{ claim.total_amount | currency:'EUR':'symbol':'1.2-2':'es' }}</p>
+          <p class="damages-count">Damages: {{ claim.damages.length }}</p>
+        </div>
+        <button class="btn-delete" (click)="deleteClaim(claim.id, $event)" title="Delete claim">
+          Delete
+        </button>
+      </div>
+    }
+  </div>
+</div>

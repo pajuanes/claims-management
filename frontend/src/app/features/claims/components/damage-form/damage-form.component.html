@@ -1,0 +1,83 @@
+<div class="damage-form-container">
+  <h3>{{ damage ? 'Edit Damage' : 'Add New Damage' }}</h3>
+  
+  <form [formGroup]="damageForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="part">Part *</label>
+      <input
+        id="part"
+        type="text"
+        formControlName="part"
+        placeholder="Enter part name"
+      />
+      @if (damageForm.get('part')?.invalid && damageForm.get('part')?.touched) {
+        <span class="error">Part is required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="severity">Severity *</label>
+      <select id="severity" formControlName="severity">
+        <option value="">Select severity</option>
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HIGH">High</option>
+      </select>
+      @if (damageForm.get('severity')?.invalid && damageForm.get('severity')?.touched) {
+        <span class="error">Severity is required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="image_url">Image URL *</label>
+      <input
+        id="image_url"
+        type="url"
+        formControlName="image_url"
+        placeholder="https://example.com/image.jpg"
+      />
+      @if (damageForm.get('image_url')?.invalid && damageForm.get('image_url')?.touched) {
+        <span class="error">Valid image URL is required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price *</label>
+      <input
+        id="price"
+        type="number"
+        formControlName="price"
+        placeholder="0.00"
+        step="0.01"
+        min="0"
+      />
+      @if (damageForm.get('price')?.invalid && damageForm.get('price')?.touched) {
+        <span class="error">Valid price is required</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="score">Score (1-10) *</label>
+      <input
+        id="score"
+        type="number"
+        formControlName="score"
+        placeholder="1-10"
+        min="1"
+        max="10"
+      />
+      @if (damageForm.get('score')?.invalid && damageForm.get('score')?.touched) {
+        <span class="error">Score must be between 1 and 10</span>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="damageForm.invalid || submitting">
+        {{ submitting ? (damage ? 'Updating...' : 'Creating...') : (damage ? 'Update Damage' : 'Create Damage') }}
+      </button>
+      <button type="button" class="btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
