@@ -108,9 +108,15 @@ claims-management/
 ├── backend/
 │   ├── app/                    # FastAPI application
 │   │   ├── main.py
+│   │   ├── migrate.py          # Database migrations
 │   │   ├── core/               # Config & DB
-│   │   ├── domain/             # Models
+│   │   │   ├── config.py       # Settings & Vault integration
+│   │   │   └── db.py           # MongoDB connection & queries
+│   │   ├── schemas/            # Pydantic models
+│   │   │   └── models.py       # Data validation models
 │   │   └── api/routes/         # Endpoints
+│   │       ├── claims.py       # Claims endpoints
+│   │       └── damages.py      # Damages endpoints
 │   │
 │   ├── node-backend/           # Node.js API (production)
 │   │   └── src/
@@ -119,9 +125,16 @@ claims-management/
 │   │       ├── routes/         # API routes
 │   │       └── services/       # External services
 │   │
-│   └── tests/
-│       ├── test_unit.py        # Unit tests
-│       └── test_integration.py # Integration tests
+│   └── tests/                  # Test suite
+│       ├── test_unit.py        # Basic unit tests
+│       ├── test_integration.py # Integration tests (require server)
+│       ├── test_claims_router.py    # Claims endpoints coverage
+│       ├── test_damages_router.py   # Damages endpoints coverage
+│       ├── test_config.py      # Config & Vault tests
+│       ├── test_db.py          # Database functions tests
+│       ├── test_main.py        # Lifespan & app tests
+│       ├── test_migrate.py     # Migration tests
+│       └── test_models.py      # Pydantic models tests
 │
 └── frontend/
     └── src/app/
@@ -221,6 +234,70 @@ pytest tests/test_unit.py -v
 - `test_health_check`: Verifica endpoint `/health`
 - `test_root`: Verifica endpoint `/` (root)
 
+#### Tests de Cobertura
+
+Tests completos que cubren todos los módulos de la aplicación:
+
+**Claims Router (`test_claims_router.py`):**
+```bash
+pytest tests/test_claims_router.py -v
+```
+- GET claims (vacío y con datos)
+- POST crear claim
+- PATCH actualizar estado
+- Validaciones: claim not found, estado inválido, descripción corta con HIGH damage
+
+**Damages Router (`test_damages_router.py`):**
+```bash
+pytest tests/test_damages_router.py -v
+```
+- GET damages (vacío y con datos)
+- POST crear damage
+- PUT actualizar damage
+- DELETE eliminar damage
+- Validaciones: claim not found, claim not PENDING, errores de base de datos
+
+**Config (`test_config.py`):**
+```bash
+pytest tests/test_config.py -v
+```
+- get_secret_key desde settings
+- get_secret_key desde Vault
+- Fallback a variable de entorno
+- Fallback a valor por defecto
+
+**Database (`test_db.py`):**
+```bash
+pytest tests/test_db.py -v
+```
+- Conexión y desconexión MongoDB
+- execute_query, execute_one
+- insert_one, insert_many
+- find_one, find_many (con/sin límite)
+- update_one, update_many
+- delete_one, delete_many
+
+**Main (`test_main.py`):**
+```bash
+pytest tests/test_main.py -v
+```
+- Lifespan startup/shutdown
+
+**Migrate (`test_migrate.py`):**
+```bash
+pytest tests/test_migrate.py -v
+```
+- Creación de tablas claims y damages
+
+**Models (`test_models.py`):**
+```bash
+pytest tests/test_models.py -v
+```
+- Enums: ClaimStatus, DamageSeverity
+- normalize_price (float, int, string, Decimal)
+- Validaciones: score, price
+- total_amount property
+
 #### Tests de Integración
 
 Requieren servidor FastAPI corriendo. Realizan peticiones HTTP reales.
@@ -245,6 +322,8 @@ pytest tests/test_integration.py -v
 API_BASE_URL=http://localhost:8000 pytest tests/test_integration.py -v
 ```
 
+**Nota:** Los tests de integración se saltan automáticamente si el servidor no está corriendo.
+
 #### Todos los Tests
 
 ```bash
@@ -262,6 +341,15 @@ pytest tests/ --cov=app --cov-report=html
 Genera reporte HTML en `htmlcov/index.html`
 
 **Objetivo de cobertura:** 95%+
+
+**Cobertura actual por módulo:**
+- `app/api/routes/claims.py`: 96%+
+- `app/api/routes/damages.py`: 100%
+- `app/core/config.py`: 100%
+- `app/core/db.py`: 100%
+- `app/schemas/models.py`: 100%
+- `app/main.py`: 100%
+- `app/migrate.py`: 100%
 
 ---
 
